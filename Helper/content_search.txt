@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+read -r -p "1) Directory: " BASE_DIR
+if [[ ! -d "$BASE_DIR" ]]; then
+  echo "ERROR: Directory not found: $BASE_DIR"
+  exit 1
+fi
+
+read -r -p "2) File name filter (optional, press Enter to skip): " NAME_FILTER
+read -r -p "3) Content to search (word/sentence): " CONTENT
+
+if [[ -z "${CONTENT// }" ]]; then
+  echo "ERROR: Content keyword cannot be empty."
+  exit 1
+fi
+
+echo ""
+echo "Result:"
+echo "-------------------"
+
+# Build find name condition (case-insensitive)
+# If NAME_FILTER is empty -> match all files
+if [[ -n "${NAME_FILTER}" ]]; then
+  FIND_NAME_ARGS=(-iname "*${NAME_FILTER}*")
+else
+  FIND_NAME_ARGS=()
+fi
+
+# 1) Normal files (non .gz) -> grep
+# -R is not used because we already enumerate files via find (safer with filters)
+# -I ignore binary, -l list matching file names once
+# Use -print0 + xargs -0 for spaces/newlines in filenames
+find "$BASE_DIR" -type f "${FIND_NAME_ARGS[@]}" ! -name "*.gz" -print0 2>/dev/null \
+  | xargs -0 -r grep -Il --binary-files=without-match -- "$CONTENT" 2>/dev/null || true
+
+# 2) .gz files -> zgrep (zcat-like search)
+find "$BASE_DIR" -type f "${FIND_NAME_ARGS[@]}" -name "*.gz" -print0 2>/dev/null \
+  | xargs -0 -r zgrep -Il -m1 -- "$CONTENT" 2>/dev/null || true

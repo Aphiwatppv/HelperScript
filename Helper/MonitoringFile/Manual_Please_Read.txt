@@ -1,0 +1,1 @@
+*/1 * * * * /home/tinker/Aphiwat/monitoringFile.sh /home/tinker/Aphiwat/log /home/tinker/Aphiwat/monitoring_paths.conf >/dev/null 2>&1
