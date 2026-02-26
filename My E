@@ -1,0 +1,23 @@
+Hi Viki,
+
+Sorry for the late reply and respond. Below is the summary of the findings
+
+**Conclusion:**
+
+* After checking with FPM UPM mentioned they manually performed retests via Orbit for many lots in BKG.
+* The Orbit team clarified that FPM retests should run automatically when required. This aligns with feedback from another colleague.
+* from the source code that Phat mentioned and Provided, the current Orbit may not fully support the retest.
+* I also checked with IE P’Saowaluk. Initially, she understood that FPM did not perform retests via Orbit. She will reconfirm the workflow with her team.
+
+**Next steps:**
+
+* P’Saowaluk will check with her Team and double-confirm the workflow.
+* Viki, could you please advise? Based on the information above, it seems that this issue may be related to the working method.
+
+**Impact:**
+
+* The part count is mismatched: EBS (715) vs Orbit (708).
+* EBS shows 715 because retest data was sent with Test Type F (continue), and EBS combines quantities from Test Type F and N.
+
+Best regards,
+Aphiwat
